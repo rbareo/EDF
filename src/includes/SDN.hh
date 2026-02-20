@@ -5,11 +5,15 @@
 #include <vector>
 #include <array>
 #include <sstream>
+#include <memory>
 
 namespace SDN {
   class Lexer;
+  class Parser;
 }
 
 #include "Types.hh"
+#include "AST.hh"
 #include "Utils.hh"
 #include "Lexer.hh"
+#include "Parser.hh"
