@@ -22,9 +22,14 @@ enum class AST::Kinds : short {
 };
 
 enum class AST::Types : short {
+  INTEGER,
+  FLOAT,
+  STRING,
+  RECORD
 };
 
 enum class AST::Operators : short {
+  COLON
 };
 
 class AST::Base {
