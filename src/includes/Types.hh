@@ -32,9 +32,20 @@ enum class SDN::Types::States : short {
   LEFT_BRACE,
   RIGHT_BRACE,
   COMMA,
+  AT,
   
   COLON,
   DECIMAL,
+  PLUS,
+  MINUS,
+  MULT,
+  DIV,
+  MOD,
+  SPREAD,
+
+  DEFINE,
+  MIXIN,
+  CONST,
   
   NUMBER_STATES
 };

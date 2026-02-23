@@ -1,1 +1,1 @@
-# Simple Data Notation — SDF
+# Extended Data Format — SDF
