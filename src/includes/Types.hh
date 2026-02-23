@@ -1,15 +1,15 @@
 #pragma once
 
-#include "SDN.hh"
+#include "EDF.hh"
 
-namespace SDN::Types {
+namespace EDF::Types {
   enum class States : short;
   struct Token;
   
   class Lexer;
 }
 
-enum class SDN::Types::States : short {
+enum class EDF::Types::States : short {
   UNKNOWN = -1,
   START,
   
@@ -24,6 +24,11 @@ enum class SDN::Types::States : short {
   CHAR_START,
   CHAR_BODY,
   CHAR_END,
+
+  TEMPLATE_START,
+  TEMPLATE_END,
+  INTERPOLATION_START,
+  INTERPOLATION_END,
   
   LEFT_PARENTHESIS,
   RIGHT_PARENTHESIS,
@@ -50,13 +55,13 @@ enum class SDN::Types::States : short {
   NUMBER_STATES
 };
 
-struct SDN::Types::Token {
-  SDN::Types::States state;
+struct EDF::Types::Token {
+  EDF::Types::States state;
   std::string_view lexeme;
   
-  Token(SDN::Types::States state, std::string_view lexeme) : state(state), lexeme(lexeme) {};
+  Token(EDF::Types::States state, std::string_view lexeme) : state(state), lexeme(lexeme) {};
   ~Token() = default;
 };
 
-using States = SDN::Types::States;
-using Token = SDN::Types::Token;
+using States = EDF::Types::States;
+using Token = EDF::Types::Token;

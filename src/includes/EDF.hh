@@ -7,7 +7,7 @@
 #include <sstream>
 #include <memory>
 
-namespace SDN {
+namespace EDF {
   class Lexer;
   class Parser;
 }

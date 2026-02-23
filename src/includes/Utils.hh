@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SDN.hh"
+#include "EDF.hh"
 
-namespace SDN::Utils {
+namespace EDF::Utils {
   std::string read_file(const std::string& file_name);
   int mainloop(std::string_view source);
 }

@@ -1,4 +1,4 @@
-#include "SDN.hh"
+#include "EDF.hh"
 
 namespace {
   using transitions = std::array<std::array<States, 128>, (size_t) States::NUMBER_STATES>;
@@ -101,7 +101,7 @@ namespace {
   }
 }
 
-std::vector<Token> SDN::Lexer::tokenize() {
+std::vector<Token> EDF::Lexer::tokenize() {
   static constexpr transitions transition_table = build_transitions();
   static constexpr acceptings acceptings_table = build_acceptings();
   std::vector<Token> tokens = {};
@@ -136,7 +136,7 @@ std::vector<Token> SDN::Lexer::tokenize() {
   return tokens;
 }
 
-bool SDN::Lexer::handle_whitespace() {
+bool EDF::Lexer::handle_whitespace() {
   switch ((size_t) last_state) {
     case (size_t) States::NEWLINE:
       line_number++;
@@ -146,4 +146,7 @@ bool SDN::Lexer::handle_whitespace() {
     default:
       return false;
   }
+}
+
+void EDF::Lexer::handle_interpolation() {
 }

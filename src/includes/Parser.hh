@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SDN.hh"
+#include "EDF.hh"
 
-class SDN::Parser {
+class EDF::Parser {
   private:
     std::vector<std::unique_ptr<AST::Base>> nodes;
 

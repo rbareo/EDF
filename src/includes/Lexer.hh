@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SDN.hh"
+#include "EDF.hh"
 
-class SDN::Lexer {
+class EDF::Lexer {
   private:
     std::string_view source;
     States last_state = States::START;
@@ -14,6 +14,7 @@ class SDN::Lexer {
     size_t start_position = 0;
     
     bool handle_whitespace();
+    void handle_interpolation();
     
   public:
     std::vector<Token> tokenize();

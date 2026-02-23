@@ -1,9 +1,9 @@
-#include "SDN.hh"
+#include "EDF.hh"
 
 int main(void) {
-  std::string file_name = "sample.sdn";
+  std::string file_name = "sample.edf";
 
-  const std::string source = SDN::Utils::read_file(file_name);
+  const std::string source = EDF::Utils::read_file(file_name);
   
-  return !SDN::Utils::mainloop(source);
+  return !EDF::Utils::mainloop(source);
 }

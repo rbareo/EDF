@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SDN.hh"
+#include "EDF.hh"
 
-namespace SDN::Types::AST {
+namespace EDF::Types::AST {
   enum class Kinds : short;
   enum class Types : short;
   enum class Operators : short;
@@ -13,7 +13,7 @@ namespace SDN::Types::AST {
   class Binary_operator;
 }
 
-namespace AST = SDN::Types::AST;
+namespace AST = EDF::Types::AST;
 
 enum class AST::Kinds : short {
   IDENTIFIER,
