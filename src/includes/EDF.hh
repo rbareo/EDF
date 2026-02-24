@@ -6,6 +6,7 @@
 #include <array>
 #include <sstream>
 #include <memory>
+#include <expected>
 
 namespace EDF {
   class Lexer;

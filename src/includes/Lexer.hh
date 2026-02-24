@@ -2,6 +2,28 @@
 
 #include "EDF.hh"
 
+class EDF::Lexer {
+  private:
+    std::string_view source;
+    States last = States::START;
+    States next;
+    size_t line_number = 1;
+    size_t column = 1;
+
+    bool handle_unwanted();
+    size_t handle_whitespace();
+    size_t handle_single_line_comments();
+    size_t handle_multiline_comments();
+    States handle_special_states();
+    States finalize_state(); // Maybe make it return a product-type struct, rather than mutating
+
+  public:
+    std::vector<Token> tokenize();
+    
+    Lexer(std::string_view source) : source(source) {};
+    ~Lexer() = default;
+};
+
 /*
 class EDF::Lexer {
   private:

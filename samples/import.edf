@@ -3,7 +3,7 @@
     @mixin test(#m): {
       mu: #m
     },
-    @const c = 5,
-    @local @const hidden = 2 // Not exposed pass file
+    @const c: 5,
+    @local @const hidden: 2 // Not exposed pass file
   }
 }

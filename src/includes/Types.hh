@@ -3,41 +3,45 @@
 #include "EDF.hh"
 
 namespace EDF::Types {
+  enum class Errors : short;
   enum class States : short;
   struct Token;
-  
-  class Lexer;
 }
 
+enum class EDF::Types::Errors : short {
+};
+
 enum class EDF::Types::States : short {
-  /*
   UNKNOWN = -1,
   START,
   
-  NEWLINE,
-  WHITESPACE,
+  GREATER_PARTIAL,
+  LESS_PARTIAL,
+  EQUALS_PARTIAL,
+  AND_PARTIAL,
+  OR_PARTIAL,
 
-  SINGLE_LINE_COMMENT,
-  MULTILINE_COMMENT_START,
-
-  DECIMAL_PARTIAL,
-  INTERPOLATION_PARTIAL,
-  
   IDENTIFIER,
-  INTEGER,
-  STRING,
-  CHAR,
 
+  TYPE_CHAR,
+  TYPE_INT,
+  TYPE_FLOAT,
+
+  INTEGER_LITERAL,
+  FLOAT_LITERAL,
+  TEMPLATE_LITERAL,
+  STRING_LITERAL,
+  CHAR_LITERAL,
+
+  TEMPLATE_START,
+  TEMPLATE_BODY,
+  TEMPLATE_END,
   STRING_START,
   STRING_BODY,
   STRING_END,
   CHAR_START,
   CHAR_BODY,
   CHAR_END,
-
-  TEMPLATE_START,
-  TEMPLATE_END,
-  INTERPOLATION_START,
   
   LEFT_PARENTHESIS,
   RIGHT_PARENTHESIS,
@@ -47,22 +51,46 @@ enum class EDF::Types::States : short {
   RIGHT_BRACE,
   COMMA,
   AT,
+  POUND,
+  DOLLAR,
+  QUESTION,
   
   COLON,
-  DECIMAL,
+
   PLUS,
   MINUS,
   MULT,
   DIV,
   MOD,
-  SPREAD,
 
+  GREATER_THAN,
+  LESS_THAN,
+  GREATER_EQUALS,
+  LESS_EQUALS,
+  EQUALS,
+  NOT_EQUALS,
+
+  AND,
+  OR,
+  NOT,
+
+  /* Going to let parser handle identifier -> keywords
   DEFINE,
+  IMPORT,
+  AS,
+  EXTENDS,
+  SCHEMA,
+  LOCAL,
   MIXIN,
   CONST,
+  IF,
+  ELIF,
+  ELSE,
+  TYPE,
+  OVERRIDE,
+  */
   
   NUMBER_STATES
-  */
 };
 
 struct EDF::Types::Token {
@@ -75,5 +103,6 @@ struct EDF::Types::Token {
   ~Token() = default;
 };
 
+using Errors = EDF::Types::Errors;
 using States = EDF::Types::States;
 using Token = EDF::Types::Token;

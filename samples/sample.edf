@@ -4,7 +4,7 @@
   // Note: @as creates a namespace
 
   @define {
-    @const fallback = -1
+    @const fallback: -1
   }
 
   foo: "example",

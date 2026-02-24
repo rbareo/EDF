@@ -9,13 +9,18 @@ std::string EDF::Utils::read_file(const std::string& file_name) {
 }
 
 int EDF::Utils::mainloop(std::string_view source) {
-  /*EDF::Lexer lexer(source);
+  EDF::Lexer lexer(source);
   std::vector<Token> tokens = lexer.tokenize();
+
+  EDF::Utils::testing(tokens);
   
-  for (Token token : tokens) {
+  return 0;
+}
+
+template <typename T>
+void EDF::Utils::testing(const T val) {
+  /* NOTE: Remove before build */
+  for (auto token : val) {
     std::cout << token.lexeme << "\n";
   }
-  */
- 
-  return 0;
 }

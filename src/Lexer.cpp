@@ -1,5 +1,62 @@
 #include "EDF.hh"
 
+namespace {
+  using transitions = std::array<std::array<States, 128>, (size_t) States::NUMBER_STATES>;
+  using acceptings = std::array<bool, (size_t) States::NUMBER_STATES>;
+
+  constexpr transitions build_transitions() {
+    transitions transitions_table = {};
+    
+    for (size_t i = 0; i < (size_t) States::NUMBER_STATES; i++) {
+      for (size_t j = 0; j < 128; j++) {
+        transitions_table[i][j] = States::UNKNOWN;
+      }
+    }
+
+    // ...
+
+    return transitions_table;
+  }
+
+  constexpr acceptings build_acceptings() {
+    acceptings acceptings_table = {};
+    
+    for (size_t i = 0; i < (size_t) States::NUMBER_STATES; i++) {
+      acceptings_table[i] = false;
+    }
+
+    // ...
+
+    return acceptings_table;
+  }
+}
+
+std::vector<Token> EDF::Lexer::tokenize() {
+  static constexpr transitions transition_table = build_transitions();
+  static constexpr acceptings acceptings_table = build_acceptings();
+  std::vector<Token> tokens = {};
+  std::string_view lexeme;
+  size_t start_position = 0;
+  States token_state;
+  char current;
+
+  for (size_t i = 0; i < source.length(); i++) {
+    current = source[i];
+    next = transition_table[(size_t) last][(unsigned char) current];
+
+    if (next != States::UNKNOWN) {
+      last = next;
+    } else {
+      if (handle_unwanted())
+        continue;
+      // finalize_token(); <- make method
+      // token_state = handle_special_states(last, lexeme);
+    }
+  }
+
+  return tokens;
+}
+
 /*
 namespace {
   using transitions = std::array<std::array<States, 128>, (size_t) States::NUMBER_STATES>;
