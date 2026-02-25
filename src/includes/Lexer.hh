@@ -4,50 +4,28 @@
 
 class EDF::Lexer {
   private:
-    std::string_view source;
-    States last = States::START;
-    States next;
-    size_t line_number = 1;
-    size_t column = 1;
+    struct Finalized_Return;
 
-    bool handle_unwanted();
-    size_t handle_whitespace();
-    size_t handle_single_line_comments();
-    size_t handle_multiline_comments();
-    States handle_special_states();
-    States finalize_state(); // Maybe make it return a product-type struct, rather than mutating
+    std::string_view source;
+    size_t line_number = 1;
+
+    size_t handle_whitespace(size_t start_position);
+    size_t handle_single_line_comments(size_t start_position);
+    size_t handle_multiline_comments(size_t start_position);
+    size_t handle_unwanted(size_t start_position);
+    // Finalized_Return handle_special_states(States state, std::string_view lexeme);
+    Finalized_Return finalize_state(States state, size_t start_position, size_t position);
 
   public:
-    std::vector<Token> tokenize();
+    std::vector<std::expected<Token, Error>> tokenize();
     
     Lexer(std::string_view source) : source(source) {};
     ~Lexer() = default;
 };
+struct EDF::Lexer::Finalized_Return {
+  const States state;
+  const std::string_view lexeme;
 
-/*
-class EDF::Lexer {
-  private:
-    std::string_view source;
-    States last = States::START;
-    States state;
-    char current;
-    std::vector<Token> tokens = {};
-    std::string_view lexeme;
-    bool ignored_state = true;
-    size_t line_number = 1;
-    size_t column = 1;
-    size_t position = 0;
-    size_t start_position = 0;
-
-    void handle_special_states();
-    void handle_interpolation();
-    void handle_single_line_comments();
-    void handle_multiline_comments();
-    
-  public:
-    std::vector<Token> tokenize();
-    
-    Lexer(std::string_view source) : source(source) {};
-    ~Lexer() = default;
+  Finalized_Return(States state, std::string_view lexeme) : state(state), lexeme(lexeme) {};
+  ~Finalized_Return() = default;
 };
-*/

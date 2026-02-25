@@ -31,31 +31,121 @@ namespace {
   }
 }
 
-std::vector<Token> EDF::Lexer::tokenize() {
+std::vector<std::expected<Token, Error>> EDF::Lexer::tokenize() {
   static constexpr transitions transition_table = build_transitions();
   static constexpr acceptings acceptings_table = build_acceptings();
-  std::vector<Token> tokens = {};
-  std::string_view lexeme;
-  size_t start_position = 0;
-  States token_state;
-  char current;
+  std::vector<std::expected<Token, Error>> tokens = {};
+  States last = States::START;
 
-  for (size_t i = 0; i < source.length(); i++) {
-    current = source[i];
-    next = transition_table[(size_t) last][(unsigned char) current];
+  for (size_t i = 0, start_position = i; i < source.length(); i++) {
+    i = handle_unwanted(i);
+    start_position = i;
+    if (i >= source.length()) break;
+
+    char current = source[i];
+    States next = transition_table[(size_t) last][(unsigned char) current];
 
     if (next != States::UNKNOWN) {
       last = next;
     } else {
-      if (handle_unwanted())
-        continue;
-      // finalize_token(); <- make method
-      // token_state = handle_special_states(last, lexeme);
+      auto return_block = finalize_state(last, start_position, i);
+      
+      if (return_block.state == States::UNKNOWN) 
+        tokens.push_back(std::unexpected(
+          Error(Errors::LEXICAL_UNKNOWN_TOKEN, return_block.lexeme, line_number)
+        ));
+      else
+        tokens.push_back(Token(return_block.state, return_block.lexeme, line_number));
+
+      start_position = --i;
     }
   }
 
   return tokens;
 }
+
+size_t EDF::Lexer::handle_whitespace(size_t start_position) {
+  size_t position = start_position;
+
+  while (
+    position < source.size()
+    && (source[position] == ' ' || source[position] == '\n' || source[position] == '\t')
+  ) {
+    if (source[position == '\n'])
+      line_number++;
+    position++;
+  }
+
+  return position;
+}
+
+size_t EDF::Lexer::handle_single_line_comments(size_t start_position) {
+  size_t position = start_position;
+
+  while (position < source.length() + 1 && source[position] != '\n') {
+    position++;
+  }
+
+  // clears \n
+  position++;
+  line_number++;
+
+  return position;
+}
+
+size_t EDF::Lexer::handle_multiline_comments(size_t start_position) {
+  size_t position = start_position;
+
+  while (position < source.length() + 1 && !(source[position] == '*' && source[position + 1] == '/')) {
+    position++;
+  }
+
+  position += 2; // clears */
+
+  return position;
+}
+
+size_t EDF::Lexer::handle_unwanted(size_t start_position) {
+  size_t position = handle_whitespace(start_position);
+
+  if (position < source.length() + 1 && source[position] == '/' && source[position + 1] == '/')
+    position = handle_single_line_comments(position);
+  else if (position < source.length() + 1 && source[position] == '/' && source[position + 1] == '*')
+    position = handle_multiline_comments(position);
+
+  return position;
+}
+
+/*
+EDF::Lexer::Finalized_Return EDF::Lexer::handle_special_states(States state, std::string_view lexeme) {
+  switch (state) {
+    case States::CHAR_END:
+      return EDF::Lexer::Finalized_Return(States::CHAR_LITERAL, lexeme.substr(1, lexeme.length() - 2));
+    case States::STRING_END:
+      return EDF::Lexer::Finalized_Return(States::STRING_LITERAL, lexeme.substr(1, lexeme.length() - 2));
+    case States::TEMPLATE_END:
+      return EDF::Lexer::Finalized_Return(States::TEMPLATE_LITERAL, lexeme.substr(1, lexeme.length() - 2));
+    default:
+      return EDF::Lexer::Finalized_Return(state, lexeme);
+  }
+}
+*/
+
+EDF::Lexer::Finalized_Return EDF::Lexer::finalize_state(States state, size_t start_position, size_t position) {
+  std::string_view lexeme = source.substr(start_position, position - start_position);
+
+  switch (state) {
+    case States::CHAR_END:
+      return EDF::Lexer::Finalized_Return(States::CHAR_LITERAL, lexeme.substr(1, lexeme.length() - 2));
+    case States::STRING_END:
+      return EDF::Lexer::Finalized_Return(States::STRING_LITERAL, lexeme.substr(1, lexeme.length() - 2));
+    case States::TEMPLATE_END:
+      return EDF::Lexer::Finalized_Return(States::TEMPLATE_LITERAL, lexeme.substr(1, lexeme.length() - 2));
+    default:
+      return EDF::Lexer::Finalized_Return(state, lexeme);
+  }
+}
+
 
 /*
 namespace {
