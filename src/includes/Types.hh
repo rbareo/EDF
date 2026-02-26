@@ -12,25 +12,18 @@ namespace EDF::Types {
 }
 
 enum class EDF::Types::Errors : short {
-  LEXICAL_UNKNOWN_TOKEN
+  // LEXICAL_UNKNOWN_TOKEN ?
+  LEXICAL_UNEXPECTED_TOKEN
 };
 
 enum class EDF::Types::States : short {
   UNKNOWN = -1,
   START,
   
-  GREATER_PARTIAL,
-  LESS_PARTIAL,
   EQUALS_PARTIAL,
   AND_PARTIAL,
-  OR_PARTIAL,
 
   IDENTIFIER,
-
-  TYPE_CHAR,
-  TYPE_INT,
-  TYPE_FLOAT,
-
   INTEGER_LITERAL,
   FLOAT_LITERAL,
   TEMPLATE_LITERAL,
@@ -60,6 +53,7 @@ enum class EDF::Types::States : short {
   QUESTION,
   
   COLON,
+  TYPE_OR,
 
   PLUS,
   MINUS,
@@ -67,32 +61,16 @@ enum class EDF::Types::States : short {
   DIV,
   MOD,
 
+  AND,
+  OR,
+  NOT,
+
   GREATER_THAN,
   LESS_THAN,
   GREATER_EQUALS,
   LESS_EQUALS,
   EQUALS,
   NOT_EQUALS,
-
-  AND,
-  OR,
-  NOT,
-
-  /* Going to let parser handle identifier -> keywords
-  DEFINE,
-  IMPORT,
-  AS,
-  EXTENDS,
-  SCHEMA,
-  LOCAL,
-  MIXIN,
-  CONST,
-  IF,
-  ELIF,
-  ELSE,
-  TYPE,
-  OVERRIDE,
-  */
   
   NUMBER_STATES
 };

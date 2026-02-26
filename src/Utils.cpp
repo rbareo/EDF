@@ -10,7 +10,7 @@ std::string EDF::Utils::read_file(const std::string& file_name) {
 
 int EDF::Utils::mainloop(std::string_view source) {
   EDF::Lexer lexer(source);
-  std::vector<Token> tokens = lexer.tokenize();
+  auto tokens = lexer.tokenize();
 
   EDF::Utils::testing(tokens);
   
@@ -20,7 +20,10 @@ int EDF::Utils::mainloop(std::string_view source) {
 template <typename T>
 void EDF::Utils::testing(const T val) {
   /* NOTE: Remove before build */
-  for (auto token : val) {
-    std::cout << token.lexeme << "\n";
+  for (std::expected<Token, Error> token : val) {
+    if (token)
+      std::cout << (size_t) token->state << "\n";
+    else
+      std::cout << "Error at " << token.error().line_number << ".\n";
   }
 }

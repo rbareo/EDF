@@ -10,5 +10,5 @@ int main(int argc, char** argv) {
 
   const std::string source = EDF::Utils::read_file(file_name);
   
-  return !EDF::Utils::mainloop(source);
+  return EDF::Utils::mainloop(source);
 }

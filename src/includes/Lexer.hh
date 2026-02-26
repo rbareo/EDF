@@ -6,14 +6,13 @@ class EDF::Lexer {
   private:
     struct Finalized_Return;
 
-    std::string_view source;
+    const std::string_view source;
     size_t line_number = 1;
 
     size_t handle_whitespace(size_t start_position);
     size_t handle_single_line_comments(size_t start_position);
     size_t handle_multiline_comments(size_t start_position);
     size_t handle_unwanted(size_t start_position);
-    // Finalized_Return handle_special_states(States state, std::string_view lexeme);
     Finalized_Return finalize_state(States state, size_t start_position, size_t position);
 
   public:
