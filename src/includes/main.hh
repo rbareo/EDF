@@ -7,6 +7,7 @@
 #include <sstream>
 #include <memory>
 #include <exception>
+#include <unordered_map>
 
 namespace EDF {
   class Lexer;

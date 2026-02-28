@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EDF.hh"
+#include "main.hh"
 
 namespace EDF::Types::AST {
   enum class Kinds : short;

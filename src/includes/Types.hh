@@ -1,12 +1,10 @@
 #pragma once
 
-#include "EDF.hh"
+#include "main.hh"
 
 namespace EDF::Types {
-  enum class Errors : short;
   enum class States : short;
 
-  struct Error;
   struct Lexer_State_Block;
   struct Token;
 }
@@ -66,6 +64,20 @@ enum class EDF::Types::States : short {
   LESS_EQUALS,
   EQUALS,
   NOT_EQUALS,
+
+  AS,
+  EXTENDS,
+  SCHEMA,
+  OVERRIDE,
+  DEFINE,
+  LOCAL,
+  CONST,
+  MIXIN,
+  TYPE,
+  ALIAS,
+  IF,
+  ELIF,
+  ELSE,
   
   NUMBER_STATES
 };

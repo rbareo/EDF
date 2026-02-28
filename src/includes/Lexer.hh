@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EDF.hh"
+#include "main.hh"
 
 class EDF::Lexer {
   private:
@@ -14,6 +14,8 @@ class EDF::Lexer {
     size_t handle_multiline_comments(size_t start_position);
     size_t handle_unwanted(size_t start_position);
     Finalized_Return finalize_state(States state, size_t start_position, size_t position);
+    std::vector<Token> formalize_tokens(const std::vector<Token> starting_tokens);
+    Token check_for_keywords(Token initial);
 
   public:
     std::vector<Token> tokenize();

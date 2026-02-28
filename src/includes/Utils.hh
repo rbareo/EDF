@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EDF.hh"
+#include "main.hh"
 
 namespace EDF::Utils {
   std::string read_file(const std::string& file_name);

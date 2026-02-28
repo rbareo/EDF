@@ -1,4 +1,4 @@
-#include "EDF.hh"
+#include "main.hh"
 
 namespace {
   using transitions = std::array<std::array<States, 128>, (size_t) States::NUMBER_STATES>;
@@ -183,7 +183,7 @@ std::vector<Token> EDF::Lexer::tokenize() {
 
   // return if it finished cleanly
   if (last == States::START)
-    return tokens;
+    return formalize_tokens(tokens);
 
   // final token flush
   auto return_block = finalize_state(last, start_position, source.length());
@@ -192,7 +192,7 @@ std::vector<Token> EDF::Lexer::tokenize() {
   else
     tokens.push_back(Token(return_block.state, return_block.lexeme, line_number));
 
-  return tokens;
+  return formalize_tokens(tokens);
 }
 
 size_t EDF::Lexer::handle_whitespace(size_t start_position) {
@@ -273,4 +273,36 @@ EDF::Lexer::Finalized_Return EDF::Lexer::finalize_state(States state, size_t sta
     default:
       return EDF::Lexer::Finalized_Return(state, lexeme);
   }
+}
+
+std::vector<Token> EDF::Lexer::formalize_tokens(const std::vector<Token> initial_tokens) {
+  std::vector<Token> simplifed_tokens = {};
+
+  for (size_t i = 0; i < initial_tokens.size(); i++) {
+    switch (initial_tokens[i].state) {
+      case States::AT:
+        if (i + 1 >= initial_tokens.size() || initial_tokens[i + 1].state != States::IDENTIFIER)
+          throw std::runtime_error("ERROR: Did not find an expected keyword at line " + initial_tokens[i].line_number);
+        simplifed_tokens.push_back(check_for_keywords(initial_tokens[++i]));
+        break;
+      default:
+        simplifed_tokens.push_back(initial_tokens[i]);
+        break;
+    }
+  }
+}
+
+Token EDF::Lexer::check_for_keywords(Token initial) {
+  static const std::unordered_map<std::string_view, States> keyword_map = {
+    {"as", States::AS}, {"extends", States::EXTENDS}, {"schema", States::SCHEMA},
+    {"override", States::OVERRIDE}, {"define", States::DEFINE}, {"local", States::LOCAL},
+    {"const", States::CONST}, {"mixin", States::MIXIN}, {"type", States::TYPE},
+    {"alias", States::ALIAS}, {"if", States::IF}, {"elif", States::ELIF},
+    {"else", States::ELSE}
+  };
+
+  if (keyword_map.find(initial.lexeme) == keyword_map.end())
+    throw std::runtime_error("ERROR: Did not find an expected keyword at line " + initial.line_number);
+
+  return Token(keyword_map.at(initial.lexeme), initial.lexeme, initial.line_number);
 }

@@ -1,4 +1,4 @@
-#include "EDF.hh"
+#include "main.hh"
 
 std::string EDF::Utils::read_file(const std::string& file_name) {
   std::ifstream file(file_name);

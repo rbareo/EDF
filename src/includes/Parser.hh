@@ -1,12 +1,11 @@
 #pragma once
 
-#include "EDF.hh"
+#include "main.hh"
 
 class EDF::Parser {
   private:
     std::vector<Token> tokens;
 
-    void simplify_tokens();
     Token& current_token();
     // bool match();
 
